@@ -1,0 +1,36 @@
+﻿  card.cpp
+C:\Users\ErikCupak\source\repos\hf\hf\card.cpp(42,15): error C2838: 'FLOWER': illegal qualified name in member declaration
+C:\Users\ErikCupak\source\repos\hf\hf\card.cpp(42,21): error C2065: 'FLOWER': undeclared identifier
+C:\Users\ErikCupak\source\repos\hf\hf\card.cpp(42,21): error C2131: expression did not evaluate to a constant
+C:\Users\ErikCupak\source\repos\hf\hf\card.cpp(42,21): message : a non-constant (sub-)expression was encountered
+C:\Users\ErikCupak\source\repos\hf\hf\card.cpp(42,1): error C2051: case expression not constant
+  game.cpp
+C:\Users\ErikCupak\source\repos\hf\hf\model.h(53,7): error C2039: 'mt19937': is not a member of 'std'
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.33.31629\include\string(24): message : see declaration of 'std'
+C:\Users\ErikCupak\source\repos\hf\hf\model.h(53,15): error C3646: 'mt': unknown override specifier
+C:\Users\ErikCupak\source\repos\hf\hf\model.h(53,17): error C2059: syntax error: '{'
+C:\Users\ErikCupak\source\repos\hf\hf\model.h(53,17): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
+  Hanafuda.cpp
+C:\Users\ErikCupak\source\repos\hf\hf\model.h(53,7): error C2039: 'mt19937': is not a member of 'std'
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.33.31629\include\string(24): message : see declaration of 'std'
+C:\Users\ErikCupak\source\repos\hf\hf\model.h(53,15): error C3646: 'mt': unknown override specifier
+C:\Users\ErikCupak\source\repos\hf\hf\model.h(53,17): error C2059: syntax error: '{'
+C:\Users\ErikCupak\source\repos\hf\hf\model.h(53,17): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
+  model.cpp
+C:\Users\ErikCupak\source\repos\hf\hf\model.h(53,7): error C2039: 'mt19937': is not a member of 'std'
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.33.31629\include\vector(24): message : see declaration of 'std'
+C:\Users\ErikCupak\source\repos\hf\hf\model.h(53,15): error C3646: 'mt': unknown override specifier
+C:\Users\ErikCupak\source\repos\hf\hf\model.h(53,17): error C2059: syntax error: '{'
+C:\Users\ErikCupak\source\repos\hf\hf\model.h(53,17): error C2334: unexpected token(s) preceding '{'; skipping apparent function body
+  score_calculator.cpp
+C:\Users\ErikCupak\source\repos\hf\hf\score_calculator.cpp(45,27): error C2397: conversion from 'unsigned __int64' to 'int' requires a narrowing conversion
+C:\Users\ErikCupak\source\repos\hf\hf\score_calculator.cpp(45,27): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\ErikCupak\source\repos\hf\hf\score_calculator.cpp(90,27): error C2397: conversion from 'unsigned __int64' to 'int' requires a narrowing conversion
+C:\Users\ErikCupak\source\repos\hf\hf\score_calculator.cpp(90,27): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\ErikCupak\source\repos\hf\hf\score_calculator.cpp(130,27): error C2397: conversion from 'unsigned __int64' to 'int' requires a narrowing conversion
+C:\Users\ErikCupak\source\repos\hf\hf\score_calculator.cpp(130,27): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\ErikCupak\source\repos\hf\hf\score_calculator.cpp(220,24): error C2397: conversion from 'unsigned __int64' to 'int' requires a narrowing conversion
+C:\Users\ErikCupak\source\repos\hf\hf\score_calculator.cpp(220,24): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+  view.cpp
+  Generating Code...
+C:\Users\ErikCupak\source\repos\hf\hf\view.cpp(191): warning C4715: 'View::MatchSwitch': not all control paths return a value
