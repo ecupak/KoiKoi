@@ -2,6 +2,7 @@
 
 #include "player.h"
 #include "card.h"
+#include "game_enum.h"
 
 
 class Model
@@ -36,6 +37,12 @@ public:
 	void GetNextDrawnCard();
 	const Card& GetDrawnCard() const;
 
+	void SetPhase(const Phase& phase);
+	const Phase& GetPhase() const;
+
+	void SetScreen(const Screen& screen);
+	const Screen& GetScreen() const;
+
 private:
 	void CreateDrawPile();
 	void ShuffleDrawPile();
@@ -55,4 +62,7 @@ private:
 
 	int m_active_player_index{ 0 };
 	int m_player_count{ 2 };
+
+	Phase m_phase{ Phase::NONE };
+	Screen m_screen{ Screen::NONE };
 };

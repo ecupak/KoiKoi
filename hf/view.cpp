@@ -64,14 +64,7 @@ const Response View::GetGameResponse(const Phase& phase, int& card_played_index,
 
 const bool View::IsNewScreenRequested(const Response& response)
 {
-	switch (response)
-	{
-	case Response::VIEW_MY_COLLECTION:
-	case Response::VIEW_THEIR_COLLECTION:
-		return true;
-	default:
-		return false;
-	}
+	return (response == Response::VIEW_CAPTURES);
 }
 
 
@@ -94,21 +87,21 @@ const Response View::GetResponse(const Prompt& prompt, const Phase& phase, int* 
 }
 
 
-void View::ShowPrompt(const Prompt& prompt, const Phase& phase) const
+void View::ShowPrompt(const Prompt& prompt) const
 {
-	switch (prompt)
+	switch (input_prompt)
 	{
-	case Prompt::PLAYED_CARD:
-		ShowPlayedCardPrompt();
+	case Prompt::PLAY_CARD:
+		ShowPlayCardPrompt();
 		break;
-	case Prompt::FIELD_CARD:
-		ShowFieldCardPrompt(phase);
+	case Prompt::MATCH_PLAYED_CARD:
+		ShowMatchPlayedCardPrompt();
 		break;
-	case Prompt::MY_COLLECTION:
-		ShowMyCollectionPrompt();
+	case Prompt::MATCH_DRAWN_CARD:
+		ShowMatchDrawnCardPrompt();
 		break;
-	case Prompt::THEIR_COLLECTION:
-		ShowTheirCollectionPrompt();
+	case Prompt::CAPTURES:
+		ShowCapturedCardsPrompt();
 		break;
 	default:
 		break;
@@ -157,10 +150,7 @@ const Response View::MainSwitch(const char first_character)
 		return Response::PLAY_FIELD;
 	case 'm':
 	case 'M':
-		return Response::VIEW_MY_COLLECTION;
-	case 'o':
-	case 'O':
-		return Response::VIEW_THEIR_COLLECTION;
+		return Response::VIEW_CAPTURES;
 	default:
 		return Response::NONE;
 	}
@@ -229,38 +219,31 @@ const Result View::GetCardIndex(const std::string& input, int* card_index)
 }
 
 
-void View::ShowPlayedCardPrompt() const
+void View::ShowPlayCardPrompt() const
 {
 	std::cout << "\nEnter card ID # in hand to play, or the [letter] of one of these commands:\n";
-	std::cout << "View [M]y Collection | View [O]pponent's Collection\n";
+	std::cout << "[V]iew captured cards\n";
 }
 
 
-void View::ShowFieldCardPrompt(const Phase& phase) const
+void View::ShowMatchPlayedCardPrompt() const
+{
+	std::cout << "\nEnter card ID # on field to match with (enter 0 if no match), or the [letter] of one of these commands:\n";	
+	std::cout << "[V]iew captured cards\n";
+}
+
+
+void View::ShowMatchDrawnCardPrompt() const
 {
 	std::cout << "\nEnter card ID # on field to match with (enter 0 if no match), or the [letter] of one of these commands:\n";
-
-	// Only allowed to change played card if selected from hand (vs drawn from deck).
-	if (phase == Phase::MATCH_FROM_HAND)
-	{
-		std::cout << "[C]hange previous input | ";
-	}
-
-	std::cout << "View [M]y Collection | View [O]pponent's collection\n";
+	std::cout << "[C]hange played card | [V]iew captured cards\n";
 }
 
 
-void View::ShowMyCollectionPrompt() const
+void View::ShowCapturedCardsPrompt() const
 {
 	std::cout << "\nEnter the [letter] of one of these commands:\n";
-	std::cout << "Return to [G]ame | View [O]pponent's collection\n";
-}
-
-
-void View::ShowTheirCollectionPrompt() const
-{
-	std::cout << "\nEnter the [letter] of one of these commands:\n";
-	std::cout << "Return to [G]ame | View [M]y Collection\n";
+	std::cout << "[R]eturn to game\n";
 }
 
 

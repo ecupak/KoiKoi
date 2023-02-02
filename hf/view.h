@@ -22,21 +22,22 @@ public:
 	void ShowMessage(const Result& result) const;
 	void ShowPlayerTurn(const int active_player_id) const;
 
+	void ShowPrompt(const Prompt& prompt) const;
 
 private:
 	const Response GetResponse(const Prompt& prompt, const Phase& phase, int* card_index);
 	
-	void ShowPrompt(const Prompt& prompt, const Phase& phase) const;
+	
 	const std::string GetInput();
 
 	const Response GetResponseFromInput(const Phase& phase, int* card_index);
 	const Response MainSwitch(const char first_character);
 	const Response MatchSwitch(const std::string& input, const Phase& phase, int* card_index);
 
-	void ShowPlayedCardPrompt() const;
-	void ShowFieldCardPrompt(const Phase& phase) const;
-	void ShowMyCollectionPrompt() const;
-	void ShowTheirCollectionPrompt() const;
+	void ShowPlayCardPrompt() const;
+	void ShowMatchPlayedCardPrompt() const;
+	void ShowMatchDrawnCardPrompt() const;
+	void ShowCapturedCardsPrompt() const;
 	
 	const bool IsNewScreenRequested(const Response& response);
 		

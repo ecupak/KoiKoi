@@ -52,17 +52,14 @@ void Game::StartRound()
 	StartTurn();
 	while (m_is_round_over == false)
 	{
-		switch (m_screen)
+		switch (m_model.GetScreen())
 		{
 		case Screen::GAME:
 			ShowGame();
-			ProcessResponse();
+			ProcessGameResponse();
 			break;
-		case Screen::MY_COLLECTION:
+		case Screen::CAPTURES:
 			//DisplayMyCollection();
-			break;
-		case Screen::THEIR_COLLECTION:
-			//DisplayTheirCollection();
 			break;
 		}
 	}
@@ -71,49 +68,277 @@ void Game::StartRound()
 
 void Game::ShowGame()
 {
-	m_view.ShowField(m_model.GetField());
-
-	switch (m_phase)
+	switch (m_model.GetPhase())
 	{
 	case Phase::MATCH_FROM_HAND:
 		m_view.ShowHand(m_model.GetPlayerHand());
+		m_view.ShowField(m_model.GetField());
 		break;
 	case Phase::MATCH_FROM_DRAW:
 		m_view.ShowDrawnCard(m_model.GetDrawnCard());
+		m_view.ShowField(m_model.GetField());
 		break;
 	}
 }
 
 
-void Game::ProcessResponse()
-{
-	int card_in_hand_display_index{ -1 };
+void Game::ProcessGameResponse()
+{	
+	int card_played_display_index{ -1 };
 	int card_on_field_display_index{ -1 };
-	Response response{ m_view.GetGameResponse(m_phase, card_in_hand_display_index, card_on_field_display_index) };
 
-	// If player requested a new screen (not CONTINUE), then don't process match.
-	if (response != Response::CONTINUE)
+	Response response{ GetResponse(card_played_display_index, card_on_field_display_index) };
+	ProcessResponse(response, card_played_display_index, card_on_field_display_index);
+}
+
+
+const Response Game::GetResponse(int& card_played_display_index, int& card_on_field_display_index)
+{		
+	Response response{ Response::NONE };
+
+	do
 	{
-		SelectNewScreen(response);
+		int prompt_id{ 1 };
+
+		// Player only selects card to play during 'match from hand' phase.
+		if (IsPlayingCardFromHand())
+		{
+			response = GetPromptResponse(prompt_id++, card_played_display_index);
+		}
+
+		// Skip asking for field card if player wants to view a different screen.
+		if (IsNewScreenRequested(response))
+		{
+			return response;
+		}
+
+		// Will always need to match card from hand or drawn card to a field card.
+		response = GetPromptResponse(prompt_id, card_on_field_display_index);
+
+	} while (response == Response::CHANGE_CARD);
+
+	return response;	
+}
+
+
+const bool Game::IsPlayingCardFromHand()
+{
+	return (m_model.GetPhase() == Phase::MATCH_FROM_HAND);
+}
+
+
+const bool Game::IsNewScreenRequested(const Response& response)
+{
+	return (response == Response::VIEW_CAPTURES);
+}
+
+
+const Response Game::GetPromptResponse(const int prompt_order, int& card_index)
+{
+	Response response{ Response::NONE };
+	const Prompt prompt{ GetPrompt(prompt_order) };
+
+	while (response == Response::NONE)
+	{
+		m_view.ShowPrompt(prompt);
+	
+		response = GetResponseToPrompt(prompt, card_index);
+	}
+
+	return response;
+}
+
+
+const Prompt Game::GetPrompt(const int prompt_order)
+{
+	switch (m_model.GetPhase())
+	{
+	case Phase::MATCH_FROM_HAND:
+		return GetMatchFromHandPrompt(prompt_order);		
+	case Phase::MATCH_FROM_DRAW:
+		return Prompt::MATCH_DRAWN_CARD;
+	}
+}
+
+
+const Prompt Game::GetMatchFromHandPrompt(const int prompt_order)
+{
+	switch (prompt_order)
+	{
+	case 0:
+		return Prompt::PLAY_CARD;
+	case 1:
+		return Prompt::MATCH_PLAYED_CARD;
+	}
+}
+
+
+const Response Game::GetResponseToPrompt(const Prompt& prompt, int& card_index)
+{
+	const std::string input{ GetInput() };
+
+	return GetResponseFromInput(input, prompt, card_index);
+}
+
+
+const std::string Game::GetInput()
+{
+	std::string input{};
+
+	do
+	{
+		std::getline(std::cin, input);
+
+	} while (input.length() < 1);
+
+	return input;
+}
+
+
+const Response Game::GetResponseFromInput(const std::string& input, const Prompt& prompt, int& card_index)
+{
+	Response response{ Response::NONE };
+
+	while (response == Response::NONE)
+	{
+		response = GetScreenChangeResponse(input[0]);
+
+		if (response == Response::NONE && prompt == Prompt::MATCH_PLAYED_CARD)
+		{
+			response = GetCardChangeResponse(input[0]);
+		}
+
+		if (response == Response::NONE)
+		{
+			response = GetCardIndexResponse(input, card_index);
+		}
+	}
+
+	return response;
+}
+
+
+const Response Game::GetScreenChangeResponse(const char input)
+{
+	switch (input)
+	{
+	case 'v':
+	case 'V':
+		return Response::VIEW_CAPTURES;
+	default:
+		return Response::NONE;
+	}
+}
+
+
+const Response Game::GetCardChangeResponse(const char input)
+{
+	switch (input)
+	{
+	case 'c':
+	case 'C':
+		return Response::VIEW_CAPTURES;
+	default:
+		return Response::NONE;
+	}
+}
+
+
+const Response Game::GetCardIndexResponse(const std::string& input, int& card_index)
+{
+	switch (GetCardIndexResult(input, card_index))
+	{
+	case Result::OK:
+		return Response::CONTINUE;
+	case Result::INVALID:
+		return Response::NONE;
+	}
+}
+
+
+const Result Game::GetCardIndexResult(const std::string& input, int& card_index)
+{
+	// Extract index form input and confirm if it is valid with result.
+	std::string extracted_index{ GetIndexFromInput(input) };
+	Result result{ GetExtractedIndexResult(extracted_index) };
+
+	// If valid, assign to card_index.
+	if (result == Result::OK)
+	{
+		card_index = std::stoi(extracted_index);
+	}
+
+	return result;
+}
+
+
+const std::string Game::GetIndexFromInput(const std::string& input)
+{
+	std::string index{};
+
+	// Copy each character into index if it is a number (ASCII decimal code 48 to 57).
+	for (const char& character : input)
+	{
+		int decimal_code{ static_cast<int>(character) };
+
+		if (decimal_code >= 48 && decimal_code <= 57)
+		{
+			index += character;
+
+			// Will only ever need 2 digits.
+			if (index.length() == 2)
+			{
+				break;
+			}
+		}
+		else
+		{
+			// Stop at first non-numeric character.
+			break;
+		}
+	}
+
+	return index;
+}
+
+
+const Result Game::GetExtractedIndexResult(const std::string& extracted_index)
+{
+	// If extracted_index has at least 1 number copied into it, it is valid input.
+	if (extracted_index.length() > 0)
+	{
+		return Result::OK;
 	}
 	else
 	{
-		// These indexes are from 1 to size() - noted as display index.
-		Result result{ GetMatchResult(card_in_hand_display_index, card_on_field_display_index) };
-		
-		switch (result)
-		{
-		case Result::OK:
-		case Result::NO_MATCH:
-			ProcessMatchPhase(result, card_in_hand_display_index, card_on_field_display_index);			
-			ConcludeMatchPhase();			
-			break;
-		default:
-			// Card index out of bounds or cards do not match.
-			m_view.ShowMessage(result);
-			break;
-		}
-	}	
+		return Result::INVALID;
+	}
+}
+
+
+
+
+
+
+// Break for new class.
+
+
+void Game::ProcessMatchResult(const int card_played_index, const int card_on_field_index)
+{
+	Result result{ GetMatchResult(card_played_index, card_on_field_index) };
+
+	switch (result)
+	{
+	case Result::OK:
+	case Result::NO_MATCH:
+		ProcessMatchPhase(result, card_in_hand_display_index, card_on_field_display_index);
+		ConcludeMatchPhase();
+		break;
+	default:
+		// Card index out of bounds or cards do not match.
+		m_view.ShowMessage(result);
+		break;
+	}
 }
 
 
@@ -124,11 +349,8 @@ void Game::SelectNewScreen(const Response& response)
 	case Response::PLAY_FIELD:
 		m_screen = Screen::GAME;
 		break;
-	case Response::VIEW_MY_COLLECTION:
-		m_screen = Screen::MY_COLLECTION;
-		break;
-	case Response::VIEW_THEIR_COLLECTION:
-		m_screen = Screen::THEIR_COLLECTION;
+	case Response::VIEW_CAPTURES:
+		m_screen = Screen::CAPTURES;
 		break;
 	}
 }
@@ -298,7 +520,6 @@ void Game::StartTurn()
 	m_phase = Phase::MATCH_FROM_HAND;
 	m_screen = Screen::GAME;
 	m_view.ShowPlayerTurn(m_model.GetActivePlayer());
-
 }
 
 

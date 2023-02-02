@@ -177,3 +177,27 @@ const std::vector<Yaku>& Model::GetYakus() const
 {
 	return m_players[m_active_player_index]->GetYakus();
 }
+
+
+void Model::SetPhase(const Phase& phase)
+{
+	m_phase = phase;
+}
+
+
+const Phase& Model::GetPhase() const
+{
+	return m_phase;
+}
+
+
+void Model::SetScreen(const Screen& screen)
+{
+	m_screen = screen;
+}
+
+
+const Screen& Model::GetScreen() const
+{
+	return m_screen;
+}

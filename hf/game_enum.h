@@ -16,8 +16,7 @@ enum class Response
 	PLAY_FIELD,
 	CHANGE_CARD,
 	CONTINUE,
-	VIEW_MY_COLLECTION,
-	VIEW_THEIR_COLLECTION,	
+	VIEW_CAPTURES,
 	NONE,
 };
 
@@ -35,7 +34,6 @@ enum class Result
 enum class Screen
 {
 	GAME,
-	MY_COLLECTION,
-	THEIR_COLLECTION,
+	CAPTURES,
 	NONE,
 };
