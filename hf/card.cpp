@@ -39,7 +39,7 @@ const std::string Card::GetDisplayDetail() const
 {
 	switch (detail)
 	{
-	case Detail::FLOWER:
+	case Detail::SAKURA_CURTAIN:
 		return "SAKURA CURTAIN";
 	case Detail::MOON:
 		return "MOON";

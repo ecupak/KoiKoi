@@ -6,6 +6,10 @@
 #include <vector>
 
 #include "score_calculator.h"
+#include "game_response.h"
+#include "game_result.h"
+#include "game_outcome.h"
+
 #include "game_enum.h"
 #include "card.h"
 
@@ -13,45 +17,43 @@
 class Game
 {
 public:
-	Game(View& view, Model& model);
+	// METHODS
 
-	void Begin();
-	
-	
-	void ProcessMatchFromHand(const int card_in_hand_index, const int card_on_field_index);
+	Game(Model& model, View& view);
+
+	void Begin();	
 
 private:
+	// METHODS
+	 
+	// Match loop.
 	const bool StartMatch();
 	void StartRound();
-	void StartTurn();
-	
-	void GetResponse();
-	
-	void ShowGame();
-	void ProcessResponse();
-	const Result GetMatchResult(const int card_played_index, const int card_on_field_index);
-	const bool IsCardInHand(const int card_from_hand_index);
-	const bool IsCardOnField(const int card_from_field_index);
-	const bool IsPlayedCardMatchFieldCard(const int card_in_hand_index, const int card_on_field_index);
-	
-	void ProcessMatchPhase(const Result& result, const int card_in_hand_display_index, const int card_on_field_display_index);
-	void ConcludeMatchPhase();
-	void CheckForYaku();	
+	void ShowRoundResults(const int rounds_played);
+	void ShowScore(const PlayerIs& player_is);
+	void ShowGameResult();
 		
-	void SelectNewScreen(const Response& response);
+	// Round loop.
+	const bool IsRoundActive() const;
+	void TakeTurn();
+	void AdvanceTurn();
 
-	void StartPhaseYaku();
-	
+	// Turn loop.
+	void StartTurn();
+	void ShowCards() const;
+	void ProcessResponse();
+	const bool IsPhase(const Phase& phase) const;
 	void AdvancePhase();
-	void PassTurn();
-	void SwapActivePlayer();
+	
+	// General.
+	void ShowCaptureReview(const PlayerIs& player_is);
+	
 
-	Phase m_phase{ Phase::MATCH_FROM_HAND };
-	Screen m_screen{ Screen::GAME };
-
-	View& m_view;
+	// VARIABLES
 	Model& m_model;
+	View& m_view;
 	ScoreCalculator m_score_calculator;
-
-	bool m_is_round_over{ false };
+	GameResponse m_game_response;
+	GameResult m_game_result;
+	GameOutcome m_game_outcome;
 };

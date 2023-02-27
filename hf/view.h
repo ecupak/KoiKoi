@@ -4,6 +4,7 @@
 #include <string>
 
 #include "card.h"
+#include "yaku.h"
 #include "game_enum.h"
 #include "view_enum.h"
 
@@ -17,28 +18,32 @@ public:
 	void ShowHand(const std::vector<Card>& hand) const;	
 	void ShowDrawnCard(const Card& drawn_card) const;
 
-	const Response GetGameResponse(const Phase& phase, int& card_played_index, int& card_on_field_index);
+	void ShowInputResult(const std::string& input, const Result& result) const;	
 	
-	void ShowMessage(const Result& result) const;
 	void ShowPlayerTurn(const int active_player_id) const;
 
+	void ShowPrompt(const Prompt& prompt) const;
+
+	void ShowCaptureIntro(const int player_id) const;
+	void ShowCaptureUpdate() const;
+	void ShowEmptyCaptureMessage() const;
+	void ShowCaptures(const std::vector<Card>& hand, const std::vector<Yaku>& yakus) const;
+
+	void ShowMatchMessage(const Result& result) const;
+	void ShowRoundWinner(const int rounds_played, const int winning_player_id) const;
+	void ShowScore(const int round_score, const int total_score) const;
+	void ShowGameWinner(const int winning_player_id = -1) const;
 
 private:
-	const Response GetResponse(const Prompt& prompt, const Phase& phase, int* card_index);
+	void ShowCard(const Card& card) const;
 	
-	void ShowPrompt(const Prompt& prompt, const Phase& phase) const;
-	const std::string GetInput();
-
-	const Response GetResponseFromInput(const Phase& phase, int* card_index);
-	const Response MainSwitch(const char first_character);
-	const Response MatchSwitch(const std::string& input, const Phase& phase, int* card_index);
-
-	void ShowPlayedCardPrompt() const;
-	void ShowFieldCardPrompt(const Phase& phase) const;
-	void ShowMyCollectionPrompt() const;
-	void ShowTheirCollectionPrompt() const;
+	void ShowPlayCardPrompt() const;
+	void ShowMatchPlayedCardPrompt() const;
+	void ShowMatchDrawnCardPrompt() const;
+	void ShowDecideKoiKoiPrompt() const;
 	
-	const bool IsNewScreenRequested(const Response& response);
-		
-	const Result GetCardIndex(const std::string& input, int* card_index);
+	void ShowCapturesByCategory(const Category& filter_category, const std::vector<Card>& hand, const std::vector<Yaku>& yakus) const;
+	const bool ShowCardsInCategory(const Category& filter_category, const std::vector<Card>& hand) const;
+	const bool ShowYakusInCategory(const Category& filter_category, const std::vector<Yaku>& yakus) const;
+	void ShowYaku(const Yaku& yaku) const;
 };

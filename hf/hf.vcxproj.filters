@@ -48,6 +48,18 @@
     <ClInclude Include="yaku.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="card_enum.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="game_response.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="game_result.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="game_outcome.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="game.cpp">
@@ -72,6 +84,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="yaku.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="game_response.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="game_result.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="game_outcome.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
