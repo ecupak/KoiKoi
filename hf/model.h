@@ -22,8 +22,8 @@ public:
 	void SetCardDisplayIndex(const CardAssignment& card_assignment, const int card_index);
 	const int GetCardDisplayIndex(const CardAssignment& card_assignment);
 
-	const Card& TakeFromHand(const int card_in_hand_index);
-	const Card& TakeFromField(const int card_on_field_index);
+	const Card TakeFromHand(const int card_in_hand_index);
+	const Card TakeFromField(const int card_on_field_index);
 
 	void AddToField(const Card& card);
 	void AddToCaptures(const Card& card);
