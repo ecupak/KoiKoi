@@ -67,7 +67,7 @@ const Response GameResponse::GetScoringResponse()
 		}
 		else
 		{
-			ShowCaptures(PlayerIs::ACTIVE);
+			ShowCaptureUpdate(PlayerIs::ACTIVE);
 			return GetPromptResponse(Prompt::DECIDE_KOIKOI);
 		}
 	}
@@ -90,7 +90,7 @@ const bool GameResponse::HasMadeNewYaku()
 }
 
 
-void GameResponse::ShowCaptureUpdate(const PlayerIs& player_is)
+void GameResponse::ShowCaptureUpdate(const PlayerIs& player_is) const
 {
 	m_view.ShowCaptureUpdate();
 	m_view.ShowCaptures(m_model.GetCaptures(player_is), m_model.GetYakus(player_is));

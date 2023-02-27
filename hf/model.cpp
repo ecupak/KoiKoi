@@ -26,6 +26,8 @@ void Model::PrepareNewRound()
 	DealCards();
 
 	SetDealer();
+
+	SetRoundStatus(true);
 }
 
 
@@ -140,7 +142,7 @@ const int Model::GetCardDisplayIndex(const CardAssignment& card_assignment)
 }
 
 
-const Card& Model::TakeFromHand(const int card_in_hand_index)
+const Card Model::TakeFromHand(const int card_in_hand_index)
 {	
 	const Card card{ m_players[m_active_player_index]->RemoveCard(card_in_hand_index) };
 	
@@ -148,7 +150,7 @@ const Card& Model::TakeFromHand(const int card_in_hand_index)
 }
 
 
-const Card& Model::TakeFromField(const int card_on_field_index)
+const Card Model::TakeFromField(const int card_on_field_index)
 {
 	const Card card{ m_field[card_on_field_index] };
 	m_field.erase(m_field.begin() + card_on_field_index);

@@ -23,7 +23,7 @@ private:
 	const Response GetMatchFromDrawResponse();
 	const Response GetScoringResponse();
 	const bool HasMadeNewYaku();
-	void ShowCaptures(const PlayerIs& player_is);
+	void ShowCaptureUpdate(const PlayerIs& player_is) const;
 	const Response GetPromptResponse(const Prompt& prompt);
 
 	// Show prompts and get response.

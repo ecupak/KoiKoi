@@ -185,7 +185,7 @@ void Game::ShowRoundResults(const int rounds_played)
 
 void Game::ShowScore(const PlayerIs& player_is)
 {
-	ShowCaptures(player_is);
+	ShowCaptureReview(player_is);
 	m_view.ShowScore(m_model.GetRoundScore(player_is), m_model.GetTotalScore(player_is));
 }
 
