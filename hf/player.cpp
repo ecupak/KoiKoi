@@ -10,7 +10,7 @@ Player::Player(const std::vector<Card>& field) { }
 void Player::ClearCards()
 {
 	m_hand.clear();
-	m_collection.clear();
+	m_captures.clear();
 }
 
 
@@ -23,7 +23,7 @@ void Player::ClearScore()
 
 void Player::ClearYakus()
 {
-	m_yaku_ids.clear();
+	m_yakus.clear();
 }
 
 
@@ -33,15 +33,28 @@ void Player::AddCardToHand(const Card& card)
 }
 
 
-void Player::AddCardToCollection(const Card& card)
+void Player::AddCardToCaptures(const Card& card)
 {
-	m_collection.push_back(card);
+	m_captures.push_back(card);
+
+	// Sort collection by category.
+	std::sort(m_captures.begin(), m_captures.end(),
+		[](Card& first_card, Card& second_card) {
+			return static_cast<int>(first_card.GetCategory()) < static_cast<int>(second_card.GetCategory());
+		}
+	);
 }
 
 
-const std::vector<Card>& Player::GetHand()
+const std::vector<Card>& Player::GetHand() const
 {
 	return m_hand;
+}
+
+
+const std::vector<Card>& Player::GetCaptures() const
+{
+	return m_captures;
 }
 
 
@@ -54,15 +67,27 @@ const Card Player::RemoveCard(const int card_in_hand_index)
 }
 
 
-const int Player::GetScore() const
+const int Player::GetRoundScore() const
 {
 	return m_score;
 }
 
 
-void Player::SetScore(const int score)
+void Player::SetRoundScore(const int score)
 {
 	m_score = score;
+}
+
+
+const int Player::GetTotalScore() const
+{
+	return m_total_score;
+}
+
+
+void Player::IncreaseTotalScore(const int final_round_score)
+{
+	m_total_score += final_round_score;
 }
 
 
@@ -75,4 +100,16 @@ void Player::AddYaku(const Yaku& yaku)
 const std::vector<Yaku>& Player::GetYakus() const
 {
 	return m_yakus;
+}
+
+
+void Player::SetKoiKoi(const bool has_koi_koi_bonus)
+{
+	m_has_koi_koi_bonus = has_koi_koi_bonus;
+}
+
+
+const bool Player::IsKoiKoiActive() const
+{
+	return m_has_koi_koi_bonus;
 }

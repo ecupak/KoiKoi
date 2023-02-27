@@ -1,11 +1,14 @@
 #include "score_calculator.h"
 
 #include "yaku.h"
+#include "game_enum.h"
 
 
-const int ScoreCalculator::CalculateNewScore(Model& model)
+void ScoreCalculator::CalculateNewScore(Model& model, const PlayerIs& player_is)
 {
-	std::vector<Card> hand{ model.GetPlayerHand() };
+	m_player_is = player_is;
+
+	std::vector<Card> hand{ model.GetCaptures(player_is) };
 
 	std::vector<Card> brights;
 	std::vector<Card> animals;
@@ -41,21 +44,19 @@ const int ScoreCalculator::CalculateNewScore(Model& model)
 
 	// Finally, calculate new score based on yakus.
 	int new_score{ 0 };
-	std::vector<Yaku> yakus{ model.GetYakus() };
+	std::vector<Yaku> yakus{ model.GetYakus(player_is) };
 	for (const Yaku& yaku : yakus)
 	{
 		new_score += yaku.GetScore();
 	}
 
-	model.SetPlayerScore(new_score);
-
-	return new_score;
+	model.SetRoundScore(new_score, player_is);
 }
 
 
 void ScoreCalculator::ScoreBrights(Model& model, const std::vector<Card>& brights)
 {
-	int size{ brights.size() };
+	int size{ static_cast<int>(brights.size()) };
 
 	// Nothing to score.
 	if (size < 3)
@@ -77,26 +78,26 @@ void ScoreCalculator::ScoreBrights(Model& model, const std::vector<Card>& bright
 	// Scoring.
 	if (size == 5)
 	{
-		model.AddYaku(Yaku{ YakuName::BRIGHT_5, 10 });
+		model.AddYaku(Yaku{ Category::BRIGHT, YakuName::BRIGHT_5, 10 }, m_player_is);
 	}
 	else if (size == 4 && !is_rainman_captured)
 	{
-		model.AddYaku(Yaku{ YakuName::BRIGHT_4, 8 });
+		model.AddYaku(Yaku{ Category::BRIGHT,YakuName::BRIGHT_4, 8 }, m_player_is);
 	}
 	else if (size == 4 && is_rainman_captured)
 	{
-		model.AddYaku(Yaku{ YakuName::BRIGHT_4_RAINY, 7 });
+		model.AddYaku(Yaku{ Category::BRIGHT,YakuName::BRIGHT_4_RAINY, 7 }, m_player_is);
 	}
 	else if (size == 3 && !is_rainman_captured)
 	{
-		model.AddYaku(Yaku{ YakuName::BRIGHT_3, 5 });
+		model.AddYaku(Yaku{ Category::BRIGHT,YakuName::BRIGHT_3, 5 }, m_player_is);
 	}
 }
 
 
 void ScoreCalculator::ScoreAnimals(Model& model, const std::vector<Card>& animals)
 {
-	int size{ animals.size() };
+	int size{ static_cast<int>(animals.size()) };
 
 	// Nothing to score.
 	if (size < 3)
@@ -121,18 +122,18 @@ void ScoreCalculator::ScoreAnimals(Model& model, const std::vector<Card>& animal
 	// Scoring.
 	if (ino_shika_cho_count == 3)
 	{
-		model.AddYaku(Yaku{ YakuName::ANIMAL_ISO, 5 + GetExtendedYakuScore(size, 3) });
+		model.AddYaku(Yaku{ Category::ANIMAL, YakuName::ANIMAL_ISO, 5 + GetExtendedYakuScore(size, 3) }, m_player_is);
 	}
 	else if (size >= 5)
 	{
-		model.AddYaku(Yaku{ YakuName::ANIMAL_TANE, 1 + GetExtendedYakuScore(size, 5) });
+		model.AddYaku(Yaku{ Category::ANIMAL, YakuName::ANIMAL_TANE, 1 + GetExtendedYakuScore(size, 5) }, m_player_is);
 	}
 }
 
 
 void ScoreCalculator::ScoreRibbons(Model& model, const std::vector<Card>& ribbons)
 {
-	int size{ ribbons.size() };
+	int size{ static_cast<int>(ribbons.size()) };
 
 	// Nothing to score.
 	if (size < 3)
@@ -158,19 +159,19 @@ void ScoreCalculator::ScoreRibbons(Model& model, const std::vector<Card>& ribbon
 	// Scoring.
 	if (poem_count == 3 && blue_count == 3)
 	{
-		model.AddYaku(Yaku{ YakuName::RIBBON_COMBO, 10 + GetExtendedYakuScore(size, 6) });
+		model.AddYaku(Yaku{ Category::RIBBON, YakuName::RIBBON_COMBO, 10 + GetExtendedYakuScore(size, 6) }, m_player_is);
 	}
 	else if (poem_count == 3)
 	{
-		model.AddYaku(Yaku{ YakuName::RIBBON_AKATAN, 5 + GetExtendedYakuScore(size, 3) });
+		model.AddYaku(Yaku{ Category::RIBBON,YakuName::RIBBON_AKATAN, 5 + GetExtendedYakuScore(size, 3) }, m_player_is);
 	}
 	else if (blue_count == 3)
 	{
-		model.AddYaku(Yaku{ YakuName::RIBBON_AOTAN, 5 + GetExtendedYakuScore(size, 3) });
+		model.AddYaku(Yaku{ Category::RIBBON,YakuName::RIBBON_AOTAN, 5 + GetExtendedYakuScore(size, 3) }, m_player_is);
 	}
 	else if (size >= 5)
 	{
-		model.AddYaku(Yaku{ YakuName::RIBBON_TANZAKU, 1 + GetExtendedYakuScore(size, 5) });
+		model.AddYaku(Yaku{ Category::RIBBON,YakuName::RIBBON_TANZAKU, 1 + GetExtendedYakuScore(size, 5) }, m_player_is);
 	}
 }
 
@@ -205,11 +206,11 @@ void ScoreCalculator::ScoreViewings(Model& model, const std::vector<Card>& anima
 
 		if (detail == Detail::MOON)
 		{
-			model.AddYaku(Yaku{ YakuName::VIEWING_MOON, 5 });
+			model.AddYaku(Yaku{ Category::BRIGHT, YakuName::VIEWING_MOON, 5 }, m_player_is);
 		}
 		else if (detail == Detail::SAKURA_CURTAIN)
 		{
-			model.AddYaku(Yaku{ YakuName::VIEWING_FLOWER, 5 });
+			model.AddYaku(Yaku{ Category::BRIGHT, YakuName::VIEWING_FLOWER, 5 }, m_player_is);
 		}
 	}
 }
@@ -217,7 +218,7 @@ void ScoreCalculator::ScoreViewings(Model& model, const std::vector<Card>& anima
 
 void ScoreCalculator::ScoreKasu(Model& model, const std::vector<Card>& kasu)
 {
-	int size{ kasu.size() };
+	int size{ static_cast<int>(kasu.size()) };
 
 	// Nothing to score.
 	if (size < 10)
@@ -228,7 +229,7 @@ void ScoreCalculator::ScoreKasu(Model& model, const std::vector<Card>& kasu)
 	// Scoring
 	if (size >= 10)
 	{
-		model.AddYaku(Yaku{ YakuName::KASU, GetExtendedYakuScore(size, 10) });
+		model.AddYaku(Yaku{ Category::KASU, YakuName::KASU, GetExtendedYakuScore(size, 10) }, m_player_is);
 	}
 }
 

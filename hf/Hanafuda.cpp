@@ -7,7 +7,7 @@ int main()
 {
 	View view{};
 	Model model{};	
-	Game game{ view, model };
+	Game game{ model, view };
 
 	game.Begin();
 }

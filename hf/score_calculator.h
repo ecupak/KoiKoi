@@ -7,11 +7,13 @@
 class ScoreCalculator
 {
 public:
+	// METHODS
 	ScoreCalculator() { }
 
-	const int CalculateNewScore(Model& model);
+	void CalculateNewScore(Model& model, const PlayerIs& player_is);
 
 private:
+	// METHODS
 	void ScoreBrights(Model& model, const std::vector<Card>& brights);
 	void ScoreAnimals(Model& model, const std::vector<Card>& animals);
 	void ScoreRibbons(Model& model, const std::vector<Card>& ribbons);
@@ -19,4 +21,7 @@ private:
 	void ScoreKasu(Model& model, const std::vector<Card>& kasu);
 
 	const int GetExtendedYakuScore(const int size, const int set_end) const;
+
+	// VARIABLES
+	PlayerIs m_player_is{ PlayerIs::ACTIVE };
 };

@@ -2,30 +2,8 @@
 
 #include <string>
 
+#include "card_enum.h"
 
-enum class Category
-{
-	BRIGHT,
-	ANIMAL,
-	RIBBON,
-	KASU,
-	UNDEFINED,
-};
-
-enum class Detail
-{
-	SAKURA_CURTAIN,
-	MOON,
-	RAINMAN,
-	BOAR,
-	DEER,
-	BUTTERFLY,
-	SAKE,
-	POEM,
-	BLUE,
-	OTHER,
-	UNDEFINED,
-};
 
 class Card
 {

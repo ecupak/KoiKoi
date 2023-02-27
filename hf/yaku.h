@@ -2,6 +2,8 @@
 
 #include <string>
 
+#include "card_enum.h"
+
 
 enum class YakuName
 {
@@ -30,12 +32,14 @@ enum class YakuName
 struct Yaku
 {
 public:
-	Yaku(const YakuName& _name, const int _score);
+	Yaku(const Category& _category, const YakuName& _name, const int _score);
 
+	const Category GetCategory() const;
 	const int GetScore() const;
 	const std::string GetDisplayYakuName() const;
 
 private:
+	Category category{ Category::UNDEFINED };
 	YakuName name{ YakuName::NONE };
 	int score{ 0 };
 };

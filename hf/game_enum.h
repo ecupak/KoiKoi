@@ -1,22 +1,28 @@
 #pragma once
 
+enum class PlayerIs
+{
+	ACTIVE,
+	INACTIVE,
+};
+
+
 enum class Phase
 {
 	MATCH_FROM_HAND,
 	MATCH_FROM_DRAW,
-	YAKU,
-	KOI_KOI,
-	AGARI,
+	SCORING,
+	END_TURN,
 	NONE,
 };
 
 
 enum class Response
 {
-	PLAY_FIELD,
 	CHANGE_CARD,
 	CONTINUE,
-	VIEW_CAPTURES,
+	KOI_KOI,
+	SHOBU,
 	NONE,
 };
 
@@ -27,13 +33,38 @@ enum class Result
 	NO_MATCH,
 	INVALID,
 	MISMATCH,
+	AVAILABLE_MATCH,
+	END_ROUND,
 	NONE,
+};
+
+
+enum class Outcome
+{
+	CONTINUE,
+	REPEAT,
+};
+
+
+enum class YakuResponse
+{
+	KOIKOI,
+	SHOBU,
+	NONE,
+};
+
+
+enum class CardAssignment
+{
+	PLAYED,
+	FIELD,
 };
 
 
 enum class Screen
 {
 	GAME,
+	YAKU,
 	CAPTURES,
 	NONE,
 };

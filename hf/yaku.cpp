@@ -1,10 +1,17 @@
 #include "yaku.h"
 
 
-Yaku::Yaku(const YakuName& _name, const int _score)
-	: name(_name)
+Yaku::Yaku(const Category& _category, const YakuName& _name, const int _score)
+	: category(_category)
+	, name(_name)
 	, score(_score)
 {	}
+
+
+const Category Yaku::GetCategory() const
+{
+	return category;
+}
 
 
 const int Yaku::GetScore() const
