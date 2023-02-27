@@ -1,10 +1,2 @@
 ﻿  game.cpp
-  game_outcome.cpp
-  game_response.cpp
-  game_result.cpp
-  Hanafuda.cpp
-  model.cpp
-  score_calculator.cpp
-  view.cpp
-  Generating Code...
   hf.vcxproj -> C:\Users\Sab\OneDrive\Documents\Workspace\ecupak\Projects\Hanafuda\x64\Debug\hf.exe

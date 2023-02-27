@@ -160,23 +160,27 @@ void View::ShowCaptureUpdate() const
 
 void View::ShowCaptures(const std::vector<Card>& hand, const std::vector<Yaku>& yakus) const
 {	
-	ShowCapturesByCategory(Category::BRIGHT, hand, yakus);
-	ShowCapturesByCategory(Category::ANIMAL, hand, yakus);
-	ShowCapturesByCategory(Category::RIBBON, hand, yakus);
-	ShowCapturesByCategory(Category::KASU, hand, yakus);
+	ShowCapturesByCategory(Category::BRIGHT, hand, yakus, true);
+	ShowCapturesByCategory(Category::ANIMAL, hand, yakus, true);
+	ShowCapturesByCategory(Category::RIBBON, hand, yakus, true);
+	ShowCapturesByCategory(Category::KASU, hand, yakus, false);
 }
 
 
 void View::ShowEmptyCaptureMessage() const
 {
-	std::cout << "No captures yet!";
+	std::cout << "No captures yet!\n";
 }
 
 
-void View::ShowCapturesByCategory(const Category& filter_category, const std::vector<Card>& hand, const std::vector<Yaku>& yakus) const
+void View::ShowCapturesByCategory(const Category& filter_category, const std::vector<Card>& hand, const std::vector<Yaku>& yakus, const bool has_newline) const
 {
+	bool was_anything_shown{ false };
+
 	// List all cards in category.
-	if (ShowCardsInCategory(filter_category, hand))
+	was_anything_shown = ShowCardsInCategory(filter_category, hand);
+
+	if (was_anything_shown)
 	{
 		std::cout << '\n';
 	}
@@ -186,13 +190,17 @@ void View::ShowCapturesByCategory(const Category& filter_category, const std::ve
 	}
 
 	// List yakus and points for category.
-	if (ShowYakusInCategory(filter_category, yakus))
-	{
-		return;
-	}
-	else
+	was_anything_shown = ShowYakusInCategory(filter_category, yakus);
+
+	if (!was_anything_shown)	
 	{
 		std::cout << "No Yaku in category.\n";
+	}
+
+	// Create empty line before next captrue category dispaly.
+	if (has_newline)
+	{
+		std::cout << '\n';
 	}
 }
 
@@ -226,6 +234,7 @@ const bool View::ShowYakusInCategory(const Category& filter_category, const std:
 		{
 			has_yaku_in_category = true;
 			ShowYaku(yaku);
+			std::cout << '\n';
 		}
 	}
 
@@ -236,14 +245,13 @@ const bool View::ShowYakusInCategory(const Category& filter_category, const std:
 void View::ShowYaku(const Yaku& yaku) const
 {
 	std::cout << yaku.GetDisplayYakuName()
-		<< " (" << yaku.GetScore() << " mon)"
-		<< '\n';
+		<< " (" << yaku.GetScore() << " mon)";
 }
 
 
 void View::ShowRoundWinner(const int rounds_played, const int active_player_id) const
 {
-	std::cout << "Player " << active_player_id + 1 << " wins round " << rounds_played << "!";
+	std::cout << "\nPlayer " << active_player_id + 1 << " wins -ROUND " << rounds_played << "- !\n";
 }
 
 
@@ -255,13 +263,13 @@ void View::ShowGameWinner(const int player_id) const // default = -1
 	}
 	else
 	{
-		std::cout << "Player " << player_id + 1 << " wins the game!";
+		std::cout << "Player " << (player_id + 1) << " wins the game!";
 	}
 }
 
 
-void View::ShowScore(const int round_score, const int total_score) const
+void View::ShowScore(const int player_id, const int round_score, const int total_score) const
 {
-	std::cout << "Round score: " << round_score;
-	std::cout << "\nTotal score: " << total_score;
+	std::cout << "\nPlayer " << (player_id + 1) << " round score : " << round_score << '\n';
+	std::cout << "Player " << (player_id + 1) << " total score : " << total_score << '\n';
 }

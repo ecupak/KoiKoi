@@ -40,8 +40,8 @@ const bool Game::StartMatch()
 
 		++rounds_played;
 
-		ShowRoundResults(rounds_played);
-
+		ProcessRoundResults(rounds_played);		
+		
 	} while (rounds_played < rounds_to_play);
 
 	ShowGameResult();
@@ -174,6 +174,13 @@ void Game::AdvanceTurn()
 }
 
 
+void Game::ProcessRoundResults(const int rounds_played)
+{
+	SaveRoundResults();
+	ShowRoundResults(rounds_played);	
+}
+
+
 void Game::ShowRoundResults(const int rounds_played)
 {
 	ShowScore(PlayerIs::ACTIVE);
@@ -186,7 +193,13 @@ void Game::ShowRoundResults(const int rounds_played)
 void Game::ShowScore(const PlayerIs& player_is)
 {
 	ShowCaptureReview(player_is);
-	m_view.ShowScore(m_model.GetRoundScore(player_is), m_model.GetTotalScore(player_is));
+	m_view.ShowScore(m_model.GetPlayerIndex(player_is), m_model.GetRoundScore(player_is), m_model.GetTotalScore(player_is));
+}
+
+
+void Game::SaveRoundResults()
+{
+	m_model.IncreaseTotalScore(m_model.GetRoundScore(PlayerIs::ACTIVE), PlayerIs::ACTIVE);
 }
 
 
