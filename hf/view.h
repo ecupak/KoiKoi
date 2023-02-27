@@ -31,7 +31,7 @@ public:
 
 	void ShowMatchMessage(const Result& result) const;
 	void ShowRoundWinner(const int rounds_played, const int winning_player_id) const;
-	void ShowScore(const int round_score, const int total_score) const;
+	void ShowScore(const int player_id, const int round_score, const int total_score) const;
 	void ShowGameWinner(const int winning_player_id = -1) const;
 
 private:
@@ -42,7 +42,7 @@ private:
 	void ShowMatchDrawnCardPrompt() const;
 	void ShowDecideKoiKoiPrompt() const;
 	
-	void ShowCapturesByCategory(const Category& filter_category, const std::vector<Card>& hand, const std::vector<Yaku>& yakus) const;
+	void ShowCapturesByCategory(const Category& filter_category, const std::vector<Card>& hand, const std::vector<Yaku>& yakus, const bool has_newline) const;
 	const bool ShowCardsInCategory(const Category& filter_category, const std::vector<Card>& hand) const;
 	const bool ShowYakusInCategory(const Category& filter_category, const std::vector<Yaku>& yakus) const;
 	void ShowYaku(const Yaku& yaku) const;

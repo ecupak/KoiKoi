@@ -29,8 +29,10 @@ private:
 	// Match loop.
 	const bool StartMatch();
 	void StartRound();
+	void ProcessRoundResults(const int rounds_played);
 	void ShowRoundResults(const int rounds_played);
 	void ShowScore(const PlayerIs& player_is);
+	void SaveRoundResults();
 	void ShowGameResult();
 		
 	// Round loop.

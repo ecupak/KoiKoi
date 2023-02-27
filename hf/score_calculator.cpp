@@ -229,7 +229,7 @@ void ScoreCalculator::ScoreKasu(Model& model, const std::vector<Card>& kasu)
 	// Scoring
 	if (size >= 10)
 	{
-		model.AddYaku(Yaku{ Category::KASU, YakuName::KASU, GetExtendedYakuScore(size, 10) }, m_player_is);
+		model.AddYaku(Yaku{ Category::KASU, YakuName::KASU, 1 + GetExtendedYakuScore(size, 10) }, m_player_is);
 	}
 }
 
