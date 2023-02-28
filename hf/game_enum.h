@@ -4,6 +4,17 @@ enum class PlayerIs
 {
 	ACTIVE,
 	INACTIVE,
+	BOTH,
+	NONE,
+};
+
+
+enum class State
+{
+	NORMAL,
+	TESHI,
+	KUTTSUKI,
+	UNKNOWN,
 };
 
 
@@ -23,6 +34,8 @@ enum class Response
 	CONTINUE,
 	KOI_KOI,
 	SHOBU,
+	REMATCH,
+	STOP,
 	NONE,
 };
 

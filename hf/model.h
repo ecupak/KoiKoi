@@ -10,10 +10,14 @@ class Model
 public:
 	Model();
 
-	void PrepareNewRound();
-	
 	void ClearCards();
-	void ClearScores();	
+	void ClearScores();
+
+	void CreateDrawPile();
+	void ShuffleDrawPile();	
+	void DealCards();
+
+	void SetDealer();
 
 	const std::vector<Card>& GetField() const;
 	const std::vector<Card>& GetHand(const PlayerIs& player_is) const;
@@ -59,15 +63,7 @@ public:
 	const bool IsKoiKoiActive() const;	
 
 private:
-	void CreateDrawPile();
-	void ShuffleDrawPile();
 	const Card DrawCard();
-	void DealCards();
-
-	void SetDealer();
-
-	void StartTurn(Player& player);
-
 
 	std::vector<Card> m_draw_pile;
 	std::vector<Card> m_field;

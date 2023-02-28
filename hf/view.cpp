@@ -61,6 +61,8 @@ void View::ShowPrompt(const Prompt& prompt) const
 		break;
 	case Prompt::DECIDE_KOIKOI:
 		ShowDecideKoiKoiPrompt();
+	case Prompt::DECIDE_REMATCH:
+		ShowDecideRematchPrompt();
 	default:
 		break;
 	}
@@ -88,6 +90,12 @@ void View::ShowMatchDrawnCardPrompt() const
 void View::ShowDecideKoiKoiPrompt() const
 {
 	std::cout << "\nDeclare [K]oi-koi or [S]hobu: ";
+}
+
+
+void View::ShowDecideRematchPrompt() const
+{
+	std::cout << "\nChoose to [P]lay again or [Q]uit game: ";
 }
 
 
@@ -136,6 +144,25 @@ void View::ShowMatchMessage(const Result& result) const
 		std::cout << "\n* * * * * * * * * * * * * *";
 		std::cout << "\n* Selection is not valid. *";
 		std::cout << "\n* * * * * * * * * * * * * *\n";
+	}
+}
+
+
+void View::ShowStateMessage(const State& state, const int player_index) const
+{
+	if (state == State::TESHI)
+	{
+		std::cout << "\n* * * * * * * * * * * * * * *";
+		std::cout << "\n* Player " << (player_index + 1) << " was dealt Teshi! *";		
+		std::cout << "\n*  (4 cards of same month)  *";
+		std::cout << "\n* * * * * * * * * * * * * * *\n";
+	}
+	else if (state == State::KUTTSUKI)
+	{
+		std::cout << "\n* * * * * * * * * * * * * * * * * *";
+		std::cout << "\n* Player " << (player_index + 1) << " started with Kuttsuki! *";		
+		std::cout << "\n*  (4 pairs of matching months)   *";
+		std::cout << "\n* * * * * * * * * * * * * * * * * *\n";
 	}
 }
 
@@ -255,11 +282,17 @@ void View::ShowRoundWinner(const int rounds_played, const int active_player_id) 
 }
 
 
+void View::ShowRoundTie(const int rounds_played) const
+{
+	std::cout << "\n-ROUND " << rounds_played << "- ends in a draw!\n";
+}
+
+
 void View::ShowGameWinner(const int player_id) const // default = -1
 {
 	if (player_id == -1)
 	{
-		std::cout << "The game ends in a draw! 0o0";
+		std::cout << "The game ends in a tie! 0o0";
 	}
 	else
 	{
