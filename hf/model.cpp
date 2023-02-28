@@ -16,21 +16,6 @@ Model::Model()
 }
 
 
-void Model::PrepareNewRound()
-{
-	ClearCards();
-	ClearScores();
-	
-	CreateDrawPile();
-	ShuffleDrawPile();
-	DealCards();
-
-	SetDealer();
-
-	SetRoundStatus(true);
-}
-
-
 void Model::ClearCards()
 {
 	m_draw_pile.clear();

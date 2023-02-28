@@ -60,6 +60,12 @@
     <ClInclude Include="game_outcome.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="game_setup.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="game_rematch.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="game.cpp">
@@ -93,6 +99,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="game_outcome.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="game_setup.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="game_rematch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

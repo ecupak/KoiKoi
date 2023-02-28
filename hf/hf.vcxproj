@@ -132,6 +132,8 @@
     <ClInclude Include="deck.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="game_outcome.h" />
+    <ClInclude Include="game_rematch.h" />
+    <ClInclude Include="game_setup.h" />
     <ClInclude Include="game_response.h" />
     <ClInclude Include="game_result.h" />
     <ClInclude Include="model.h" />
@@ -147,6 +149,8 @@
     <ClCompile Include="card.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="game_outcome.cpp" />
+    <ClCompile Include="game_rematch.cpp" />
+    <ClCompile Include="game_setup.cpp" />
     <ClCompile Include="game_response.cpp" />
     <ClCompile Include="game_result.cpp" />
     <ClCompile Include="Hanafuda.cpp" />

@@ -4,10 +4,12 @@
 
 Game::Game(Model& model, View& view)
 	: m_model{ model }
-	, m_view{ view }	
+	, m_view{ view }
+	, m_game_setup{ model, view }
 	, m_game_response{ model, view }
 	, m_game_result{ model }
 	, m_game_outcome{ model, view }
+	, m_game_rematch{ view }
 {	}
 
 
@@ -26,28 +28,26 @@ void Game::Begin()
 const bool Game::StartMatch()
 {
 	int rounds_played{ 0 };
-	int rounds_to_play{ 12 };
-
+	int rounds_to_play{ 3 }; // 12 or 6
+	
 	do
 	{
-		m_model.PrepareNewRound(); // PrepareNewRound in game, makes multiple calls to model?
-
-		// check for instant win in hand
-		// check for round end on field
-		// 4 sets of 2 cards of the same month || 1 set of 4 cards of the same month
-
-		StartRound();
-
+		Result setup_result{ m_game_setup.Setup() };
+		
+		if (setup_result == Result::OK)
+		{
+			StartRound();
+		}
+		
 		++rounds_played;
 
-		ProcessRoundResults(rounds_played);		
+		ProcessRoundResults(rounds_played);
 		
 	} while (rounds_played < rounds_to_play);
 
 	ShowGameResult();
-
-	// ask and return if the players want to play again.
-	return false;
+		
+	return WillPlayAgain();
 }
 
 
@@ -176,17 +176,25 @@ void Game::AdvanceTurn()
 
 void Game::ProcessRoundResults(const int rounds_played)
 {
-	SaveRoundResults();
-	ShowRoundResults(rounds_played);	
+	SaveRoundScore();
+	
+	ShowRoundScore();	
+
+	ShowRoundResult(rounds_played);
 }
 
 
-void Game::ShowRoundResults(const int rounds_played)
+void Game::SaveRoundScore()
+{
+	m_model.IncreaseTotalScore(m_model.GetRoundScore(PlayerIs::ACTIVE), PlayerIs::ACTIVE);
+	m_model.IncreaseTotalScore(m_model.GetRoundScore(PlayerIs::INACTIVE), PlayerIs::INACTIVE);
+}
+
+
+void Game::ShowRoundScore()
 {
 	ShowScore(PlayerIs::ACTIVE);
 	ShowScore(PlayerIs::INACTIVE);
-
-	m_view.ShowRoundWinner(rounds_played, m_model.GetPlayerIndex(PlayerIs::ACTIVE));
 }
 
 
@@ -197,9 +205,26 @@ void Game::ShowScore(const PlayerIs& player_is)
 }
 
 
-void Game::SaveRoundResults()
+void Game::ShowRoundResult(const int rounds_played)
 {
-	m_model.IncreaseTotalScore(m_model.GetRoundScore(PlayerIs::ACTIVE), PlayerIs::ACTIVE);
+	int score_active{ m_model.GetRoundScore(PlayerIs::ACTIVE) };
+	int score_inactive{ m_model.GetRoundScore(PlayerIs::INACTIVE) };
+	
+	PlayerIs winning_player{ score_active > score_inactive 
+		? PlayerIs::ACTIVE 
+		: score_inactive > score_active
+			? PlayerIs::INACTIVE 
+			: PlayerIs::NONE 
+	};
+
+	if (winning_player == PlayerIs::NONE)
+	{
+		m_view.ShowRoundTie(rounds_played);
+	}
+	else
+	{
+		m_view.ShowRoundWinner(rounds_played, m_model.GetPlayerIndex(winning_player));
+	}
 }
 
 
@@ -220,4 +245,12 @@ void Game::ShowGameResult()
 	{
 		m_view.ShowGameWinner();
 	}
+}
+
+
+const bool Game::WillPlayAgain() const
+{
+	Response response{ m_game_rematch.GetResponse() };
+	
+	return response == Response::REMATCH;
 }

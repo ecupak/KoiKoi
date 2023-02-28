@@ -6,9 +6,11 @@
 #include <vector>
 
 #include "score_calculator.h"
+#include "game_setup.h"
 #include "game_response.h"
 #include "game_result.h"
 #include "game_outcome.h"
+#include "game_rematch.h"
 
 #include "game_enum.h"
 #include "card.h"
@@ -26,15 +28,18 @@ public:
 private:
 	// METHODS
 	 
-	// Match loop.
+	// Match loop.	
 	const bool StartMatch();
+	void PrepareNewRound();
 	void StartRound();
 	void ProcessRoundResults(const int rounds_played);
-	void ShowRoundResults(const int rounds_played);
+	void SaveRoundScore();
+	void ShowRoundScore();
 	void ShowScore(const PlayerIs& player_is);
-	void SaveRoundResults();
+	void ShowRoundResult(const int rounds_played);
 	void ShowGameResult();
-		
+	const bool WillPlayAgain() const;
+
 	// Round loop.
 	const bool IsRoundActive() const;
 	void TakeTurn();
@@ -55,7 +60,9 @@ private:
 	Model& m_model;
 	View& m_view;
 	ScoreCalculator m_score_calculator;
+	GameSetup m_game_setup;
 	GameResponse m_game_response;
 	GameResult m_game_result;
 	GameOutcome m_game_outcome;
+	GameRematch m_game_rematch;
 };
