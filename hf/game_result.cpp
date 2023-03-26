@@ -22,14 +22,6 @@ const Result GameResult::GetResult(const Response& response)
 
 const Result GameResult::GetMatchResult() const
 {
-	// Validate field card first to detect a 'no match' situation.
-	Result field_card_result{ GetFieldCardResult() };
-
-	if (IsResultNotOK(field_card_result))
-	{
-		return field_card_result; // NO_MATCH, AVAILABLE_MATCH, INVALID.
-	}
-
 	// Validate the played card.
 	Result played_card_result{ GetPlayedCardResult() };
 
@@ -38,6 +30,14 @@ const Result GameResult::GetMatchResult() const
 		return played_card_result; // INVALID.
 	}
 
+	// Validate field card.
+	Result field_card_result{ GetFieldCardResult() };
+
+	if (IsResultNotOK(field_card_result))
+	{
+		return field_card_result; // NO_MATCH, AVAILABLE_MATCH, INVALID.
+	}
+	
 	// Confirm cards match.
 	if (GetCaptureResult())
 	{
